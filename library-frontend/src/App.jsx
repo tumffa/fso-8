@@ -5,7 +5,7 @@ import { useQuery } from '@apollo/client'
 import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
-import { ALL_AUTHORS, ALL_BOOKS } from './queries'
+import { ALL_AUTHORS, ALL_BOOKS } from './gql'
 
 const App = () => {
   const location = useLocation()
@@ -15,7 +15,8 @@ const App = () => {
   const authors = authorsResult.data ? authorsResult.data.allAuthors : []
   
   const booksResult = useQuery(ALL_BOOKS, {
-    skip: location.pathname !== '/books'})
+    skip: location.pathname !== '/books',
+    pollInterval: 2000})
   const books = booksResult.data ? booksResult.data.allBooks : []
 
   return (
