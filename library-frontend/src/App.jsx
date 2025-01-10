@@ -5,13 +5,15 @@ import { useQuery } from '@apollo/client'
 import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
+import BirthyearForm from "./components/EditBirthYearForm";
 import { ALL_AUTHORS, ALL_BOOKS } from './gql'
 
 const App = () => {
   const location = useLocation()
 
   const authorsResult = useQuery(ALL_AUTHORS, {
-    skip: location.pathname !== '/authors'})
+    skip: location.pathname !== '/authors',
+    pollInterval: 2000})
   const authors = authorsResult.data ? authorsResult.data.allAuthors : []
   
   const booksResult = useQuery(ALL_BOOKS, {
@@ -25,11 +27,13 @@ const App = () => {
         <Link to="/authors"><button>authors</button></Link>
         <Link to="/books"><button>books</button></Link>
         <Link to="/add"><button>add book</button></Link>
+        <Link to="/edit-birth-year"><button>edit birthyear</button></Link>
       </div>
       <Routes>
         <Route path="/authors" element={<Authors authors={authors} />} />
         <Route path="/books" element={<Books books={books} />} />
         <Route path="/add" element={<NewBook />} />
+        <Route path="/edit-birth-year" element={<BirthyearForm />} />
       </Routes>
     </div>
   );
