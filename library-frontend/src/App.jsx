@@ -12,7 +12,7 @@ const App = () => {
   const location = useLocation()
 
   const authorsResult = useQuery(ALL_AUTHORS, {
-    skip: location.pathname !== '/authors',
+    skip: location.pathname !== '/authors' && location.pathname !== '/edit-birth-year',
     pollInterval: 2000})
   const authors = authorsResult.data ? authorsResult.data.allAuthors : []
   
@@ -33,7 +33,7 @@ const App = () => {
         <Route path="/authors" element={<Authors authors={authors} />} />
         <Route path="/books" element={<Books books={books} />} />
         <Route path="/add" element={<NewBook />} />
-        <Route path="/edit-birth-year" element={<BirthyearForm />} />
+        <Route path="/edit-birth-year" element={<BirthyearForm authors={authors}/>} />
       </Routes>
     </div>
   );
