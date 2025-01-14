@@ -211,7 +211,7 @@ const resolvers = {
     }
   },
   Mutation: {
-    addBook: async (root, args) => {
+    addBook: async (root, args, context) => {
       if (!context.currentUser) {
         throw new GraphQLError('not authenticated', {
           extensions: {
