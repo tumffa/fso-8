@@ -8,7 +8,8 @@ import Books from "./components/Books"
 import NewBook from "./components/NewBook"
 import BirthyearForm from "./components/EditBirthYearForm"
 import LoginForm from "./components/LoginForm"
-import { ALL_AUTHORS, ALL_BOOKS } from './gql'
+import RecommendedBooks from "./components/Recommended"
+import { ALL_AUTHORS, ALL_BOOKS, USER_INFO } from './gql'
 
 const App = () => {
   const [token, setToken] = useState(null)
@@ -30,9 +31,14 @@ const App = () => {
   const authors = authorsResult.data ? authorsResult.data.allAuthors : []
   
   const booksResult = useQuery(ALL_BOOKS, {
-    skip: location.pathname !== '/books',
+    skip: location.pathname !== '/books' && location.pathname !== '/recommendations',
     pollInterval: 2000})
   const books = booksResult.data ? booksResult.data.allBooks : []
+
+  const userInfoResult = useQuery(USER_INFO, {
+    skip: !token
+  })
+  const userInfo = userInfoResult.data ? userInfoResult.data.me : null
 
   const logout = () => {
     setToken(null)
@@ -58,6 +64,7 @@ const App = () => {
           <>
             <Link to="/add"><button>add book</button></Link>
             <Link to="/edit-birth-year"><button>edit birthyear</button></Link>
+            <Link to="/recommendations"><button>recommendations</button></Link>
             <button onClick={logout}>logout</button>
           </>
         ) : (
@@ -71,6 +78,7 @@ const App = () => {
           <>
             <Route path="/add" element={<NewBook />} />
             <Route path="/edit-birth-year" element={<BirthyearForm authors={authors}/>} />
+            <Route path="/recommendations" element={<RecommendedBooks books={books} userInfo={userInfo} />} />
           </>
         ) : (
           <Route path="/login" element={

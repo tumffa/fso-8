@@ -207,7 +207,8 @@ const resolvers = {
       }))
     },
     me: (root, args, context) => {
-      return context.currentUser
+      const user = context.currentUser
+      return { username: user.username, favoriteGenre: user.favoriteGenre }
     }
   },
   Mutation: {
