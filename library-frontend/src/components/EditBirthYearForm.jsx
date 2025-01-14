@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
-import { useMutation } from '@apollo/client';
-import { EDIT_AUTHOR } from '../gql';
+import { useMutation } from '@apollo/client'
+import { useNavigate } from 'react-router-dom';
+import { EDIT_AUTHOR, ALL_AUTHORS } from '../gql';
 
 const EditBirthYearForm = ({ authors }) => {
   const [name, setName] = useState('');
   const [born, setBorn] = useState('');
+  const navigate = useNavigate();
 
-  const [editBirthyear] = useMutation(EDIT_AUTHOR);
+  const [editBirthyear] = useMutation(EDIT_AUTHOR, {
+    refetchQueries: [{ query: ALL_AUTHORS }]
+  })
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -20,6 +24,7 @@ const EditBirthYearForm = ({ authors }) => {
 
     setName('');
     setBorn('');
+    navigate('/');
   };
 
   return (
