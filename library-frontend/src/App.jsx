@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react'
 import {
   Routes, Route, Link, useLocation, useNavigate
 } from 'react-router-dom'
-import { useQuery, useApolloClient } from '@apollo/client'
+import { useQuery, useApolloClient, useSubscription } from '@apollo/client'
 import Authors from "./components/Authors"
 import Books from "./components/Books"
 import NewBook from "./components/NewBook"
 import BirthyearForm from "./components/EditBirthYearForm"
 import LoginForm from "./components/LoginForm"
 import RecommendedBooks from "./components/Recommended"
-import { ALL_AUTHORS, ALL_BOOKS, USER_INFO } from './gql'
+import { ALL_AUTHORS, ALL_BOOKS, USER_INFO, BOOK_ADDED } from './gql'
 
 const App = () => {
   const [token, setToken] = useState(null)
@@ -39,6 +39,13 @@ const App = () => {
     skip: !token
   })
   const userInfo = userInfoResult.data ? userInfoResult.data.me : null
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data }) => {
+      const addedBook = data.data.bookAdded
+      window.alert(`Added book ${addedBook.title}`)
+    }
+  })
 
   const logout = () => {
     setToken(null)
